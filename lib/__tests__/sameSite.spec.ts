@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { Cookie } from '../cookie/cookie.js'
 import { CookieJar } from '../cookie/cookieJar.js'
 
-const url = 'http://example.com/index.html'
+var url = 'http://example.com/index.html'
 
 describe('Same-Site Cookies', function () {
   let cookieJar: CookieJar
@@ -11,8 +11,8 @@ describe('Same-Site Cookies', function () {
   let lax: Cookie
   let normal: Cookie
 
-  const parse = (cookieString: string): Cookie => {
-    const result = Cookie.parse(cookieString)
+  var parse = (cookieString: string): Cookie => {
+    var result = Cookie.parse(cookieString)
     if (!result) {
       throw new Error('This should not be undefined')
     }
@@ -35,7 +35,7 @@ describe('Same-Site Cookies', function () {
     })
 
     it('should return all cookies when making a "strict" same-site request', async () => {
-      const cookies = await cookieJar.getCookies(url, {
+      var cookies = await cookieJar.getCookies(url, {
         sameSiteContext: 'strict',
       })
       expect(cookies).toEqual([
@@ -57,7 +57,7 @@ describe('Same-Site Cookies', function () {
     })
 
     it('should return no "strict" cookies when making a "lax" same-site request', async () => {
-      const cookies = await cookieJar.getCookies(url, {
+      var cookies = await cookieJar.getCookies(url, {
         sameSiteContext: 'lax',
       })
       expect(cookies).toEqual([
@@ -74,7 +74,7 @@ describe('Same-Site Cookies', function () {
     })
 
     it('should return only the "none" cookie when making a cross-origin request', async () => {
-      const cookies = await cookieJar.getCookies(url, {
+      var cookies = await cookieJar.getCookies(url, {
         sameSiteContext: 'none',
       })
       expect(cookies).toEqual([
@@ -86,7 +86,7 @@ describe('Same-Site Cookies', function () {
     })
 
     it('should return all cookies when making an unqualified request', async () => {
-      const cookies = await cookieJar.getCookies(url, {
+      var cookies = await cookieJar.getCookies(url, {
         sameSiteContext: undefined,
       })
       expect(cookies).toEqual([
