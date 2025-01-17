@@ -3,9 +3,9 @@
 import type { Nullable } from '../utils.js'
 
 // eslint-disable-next-line no-control-regex
-var DATE_DELIM = /[\x09\x20-\x2F\x3B-\x40\x5B-\x60\x7B-\x7E]/
+const DATE_DELIM = /[\x09\x20-\x2F\x3B-\x40\x5B-\x60\x7B-\x7E]/
 
-var MONTH_TO_NUM = {
+const MONTH_TO_NUM = {
   jan: 0,
   feb: 1,
   mar: 2,
@@ -38,7 +38,7 @@ function parseDigits(
 ): number | undefined {
   let count = 0
   while (count < token.length) {
-    var c = token.charCodeAt(count)
+    const c = token.charCodeAt(count)
     // "non-digit = %x00-2F / %x3A-FF"
     if (c <= 0x2f || c >= 0x3a) {
       break
@@ -59,8 +59,8 @@ function parseDigits(
 }
 
 function parseTime(token: string): number[] | undefined {
-  var parts = token.split(':')
-  var result = [0, 0, 0]
+  const parts = token.split(':')
+  const result = [0, 0, 0]
 
   /* RF6256 S5.1.1:
    *      time            = hms-time ( non-digit *OCTET )
@@ -76,12 +76,12 @@ function parseTime(token: string): number[] | undefined {
     // "time-field" must be strictly "1*2DIGIT", HOWEVER, "hms-time" can be
     // followed by "( non-digit *OCTET )" therefore the last time-field can
     // have a trailer
-    var trailingOK = i == 2
-    var numPart = parts[i]
+    const trailingOK = i == 2
+    const numPart = parts[i]
     if (numPart === undefined) {
       return
     }
-    var num = parseDigits(numPart, 1, 2, trailingOK)
+    const num = parseDigits(numPart, 1, 2, trailingOK)
     if (num === undefined) {
       return
     }
@@ -233,7 +233,7 @@ export function parseDate(cookieDate: Nullable<string>): Date | undefined {
    * 2. Process each date-token sequentially in the order the date-tokens
    * appear in the cookie-date
    */
-  var tokens = cookieDate.split(DATE_DELIM)
+  const tokens = cookieDate.split(DATE_DELIM)
 
   let hour: number | undefined
   let minute: number | undefined
@@ -243,7 +243,7 @@ export function parseDate(cookieDate: Nullable<string>): Date | undefined {
   let year: number | undefined
 
   for (let i = 0; i < tokens.length; i++) {
-    var token = (tokens[i] ?? '').trim()
+    const token = (tokens[i] ?? '').trim()
     if (!token.length) {
       continue
     }
@@ -255,7 +255,7 @@ export function parseDate(cookieDate: Nullable<string>): Date | undefined {
      * to the next date-token.
      */
     if (second === undefined) {
-      var result = parseTime(token)
+      const result = parseTime(token)
       if (result) {
         hour = result[0]
         minute = result[1]
@@ -271,7 +271,7 @@ export function parseDate(cookieDate: Nullable<string>): Date | undefined {
      */
     if (dayOfMonth === undefined) {
       // "day-of-month = 1*2DIGIT ( non-digit *OCTET )"
-      var result = parseDigits(token, 1, 2, true)
+      const result = parseDigits(token, 1, 2, true)
       if (result !== undefined) {
         dayOfMonth = result
         continue
@@ -284,7 +284,7 @@ export function parseDate(cookieDate: Nullable<string>): Date | undefined {
      * continue to the next date-token.
      */
     if (month === undefined) {
-      var result = parseMonth(token)
+      const result = parseMonth(token)
       if (result !== undefined) {
         month = result
         continue
@@ -298,7 +298,7 @@ export function parseDate(cookieDate: Nullable<string>): Date | undefined {
      */
     if (year === undefined) {
       // "year = 2*4DIGIT ( non-digit *OCTET )"
-      var result = parseDigits(token, 2, 4, true)
+      const result = parseDigits(token, 2, 4, true)
       if (result !== undefined) {
         year = result
         /* From S5.1.1:
