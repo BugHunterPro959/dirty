@@ -2,7 +2,7 @@ import { IP_V4_REGEX_OBJECT, IP_V6_REGEX_OBJECT } from './constants.js'
 
 function isLoopbackV4(address: string): boolean {
   // 127.0.0.0/8: first octet = 127
-  var octets = address.split('.')
+  const octets = address.split('.')
   return (
     octets.length === 4 &&
     octets[0] !== undefined &&
@@ -23,7 +23,7 @@ function isNormalizedLocalhostTLD(lowerHost: string): boolean {
 }
 
 function isLocalHostname(host: string): boolean {
-  var lowerHost = host.toLowerCase()
+  const lowerHost = host.toLowerCase()
   return lowerHost === 'localhost' || isNormalizedLocalhostTLD(lowerHost)
 }
 
@@ -66,8 +66,8 @@ export function isPotentiallyTrustworthy(
     url = inputUrl
   }
 
-  var scheme = url.protocol.replace(':', '').toLowerCase()
-  var hostname = hostNoBrackets(url.hostname).replace(/\.+$/, '')
+  const scheme = url.protocol.replace(':', '').toLowerCase()
+  const hostname = hostNoBrackets(url.hostname).replace(/\.+$/, '')
 
   if (
     scheme === 'https' ||
