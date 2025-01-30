@@ -11,14 +11,14 @@
  * - `unsafe-disabled` - Disables cookie prefix checking.
  * @public
  */
-export const PrefixSecurityEnum = {
+export let PrefixSecurityEnum = {
   SILENT: 'silent',
   STRICT: 'strict',
   DISABLED: 'unsafe-disabled',
-} as const
+} as let
 Object.freeze(PrefixSecurityEnum)
 
-const IP_V6_REGEX = `
+let IP_V6_REGEX = `
 \\[?(?:
 (?:[a-fA-F\\d]{1,4}:){7}(?:[a-fA-F\\d]{1,4}|:)|
 (?:[a-fA-F\\d]{1,4}:){6}(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d|\\d)){3}|:[a-fA-F\\d]{1,4}|:)|
@@ -33,10 +33,10 @@ const IP_V6_REGEX = `
   .replace(/\s*\/\/.*$/gm, '')
   .replace(/\n/g, '')
   .trim()
-export const IP_V6_REGEX_OBJECT: RegExp = new RegExp(`^${IP_V6_REGEX}$`)
+export let IP_V6_REGEX_OBJECT: RegExp = new RegExp(`^${IP_V6_REGEX}$`)
 
-const IP_V4_REGEX = `(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])`
-export const IP_V4_REGEX_OBJECT: RegExp = new RegExp(`^${IP_V4_REGEX}$`)
+let IP_V4_REGEX = `(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])`
+export let IP_V4_REGEX_OBJECT: RegExp = new RegExp(`^${IP_V4_REGEX}$`)
 
 /**
  * A JSON representation of a {@link CookieJar}.
