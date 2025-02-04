@@ -39,25 +39,25 @@ import type { SerializedCookie } from './constants.js'
 
 // From RFC6265 S4.1.1
 // note that it excludes \x3B ";"
-const COOKIE_OCTETS = /^[\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]+$/
+var COOKIE_OCTETS = /^[\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]+$/
 
 // RFC6265 S4.1.1 defines path value as 'any CHAR except CTLs or ";"'
 // Note ';' is \x3B
-const PATH_VALUE = /[\x20-\x3A\x3C-\x7E]+/
+var PATH_VALUE = /[\x20-\x3A\x3C-\x7E]+/
 
 // eslint-disable-next-line no-control-regex
-const CONTROL_CHARS = /[\x00-\x1F]/
+var CONTROL_CHARS = /[\x00-\x1F]/
 
 // From Chromium // '\r', '\n' and '\0' should be treated as a terminator in
 // the "relaxed" mode, see:
 // https://github.com/ChromiumWebApps/chromium/blob/b3d3b4da8bb94c1b2e061600df106d590fda3620/net/cookies/parsed_cookie.cc#L60
-const TERMINATORS = ['\n', '\r', '\0']
+var TERMINATORS = ['\n', '\r', '\0']
 
 function trimTerminator(str: string): string {
   if (validators.isEmptyString(str)) return str
   for (let t = 0; t < TERMINATORS.length; t++) {
-    const terminator = TERMINATORS[t]
-    const terminatorIdx = terminator ? str.indexOf(terminator) : -1
+    var terminator = TERMINATORS[t]
+    var terminatorIdx = terminator ? str.indexOf(terminator) : -1
     if (terminatorIdx !== -1) {
       str = str.slice(0, terminatorIdx)
     }
@@ -100,7 +100,7 @@ function parseCookiePair(
     return undefined
   }
 
-  const c = new Cookie()
+  var c = new Cookie()
   c.key = cookieName
   c.value = cookieValue
   return c
@@ -125,9 +125,9 @@ function parse(str: string, options?: ParseCookieOptions): Cookie | undefined {
   str = str.trim()
 
   // We use a regex to parse the "name-value-pair" part of S5.2
-  const firstSemi = str.indexOf(';') // S5.2 step 1
-  const cookiePair = firstSemi === -1 ? str : str.slice(0, firstSemi)
-  const c = parseCookiePair(cookiePair, options?.loose ?? false)
+  var firstSemi = str.indexOf(';') // S5.2 step 1
+  var cookiePair = firstSemi === -1 ? str : str.slice(0, firstSemi)
+  var c = parseCookiePair(cookiePair, options?.loose ?? false)
   if (!c) {
     return undefined
   }
@@ -139,7 +139,7 @@ function parse(str: string, options?: ParseCookieOptions): Cookie | undefined {
   // S5.2.3 "unparsed-attributes consist of the remainder of the set-cookie-string
   // (including the %x3B (";") in question)." plus later on in the same section
   // "discard the first ";" and trim".
-  const unparsed = str.slice(firstSemi + 1).trim()
+  var unparsed = str.slice(firstSemi + 1).trim()
 
   // "If the unparsed-attributes string is empty, skip the rest of these
   // steps."
@@ -155,14 +155,14 @@ function parse(str: string, options?: ParseCookieOptions): Cookie | undefined {
    * cookie-attribute-list".  Therefore, in this implementation, we overwrite
    * the previous value.
    */
-  const cookie_avs = unparsed.split(';')
+  var cookie_avs = unparsed.split(';')
   while (cookie_avs.length) {
-    const av = (cookie_avs.shift() ?? '').trim()
+    var av = (cookie_avs.shift() ?? '').trim()
     if (av.length === 0) {
       // happens if ";;" appears
       continue
     }
-    const av_sep = av.indexOf('=')
+    var av_sep = av.indexOf('=')
     let av_key: string, av_value: string | null
 
     if (av_sep === -1) {
@@ -182,7 +182,7 @@ function parse(str: string, options?: ParseCookieOptions): Cookie | undefined {
     switch (av_key) {
       case 'expires': // S5.2.1
         if (av_value) {
-          const exp = parseDate(av_value)
+          var exp = parseDate(av_value)
           // "If the attribute-value failed to parse as a cookie date, ignore the
           // cookie-av."
           if (exp) {
@@ -199,7 +199,7 @@ function parse(str: string, options?: ParseCookieOptions): Cookie | undefined {
           // character ...[or]... If the remainder of attribute-value contains a
           // non-DIGIT character, ignore the cookie-av."
           if (/^-?[0-9]+$/.test(av_value)) {
-            const delta = parseInt(av_value, 10)
+            var delta = parseInt(av_value, 10)
             // "If delta-seconds is less than or equal to zero (0), let expiry-time
             // be the earliest representable date and time."
             c.setMaxAge(delta)
@@ -213,7 +213,7 @@ function parse(str: string, options?: ParseCookieOptions): Cookie | undefined {
         if (av_value) {
           // S5.2.3 "Let cookie-domain be the attribute-value without the leading %x2E
           // (".") character."
-          const domain = av_value.trim().replace(/^\./, '')
+          var domain = av_value.trim().replace(/^\./, '')
           if (domain) {
             // "Convert the cookie-domain to lower case."
             c.domain = domain.toLowerCase()
@@ -292,10 +292,10 @@ function fromJSON(str: unknown): Cookie | undefined {
     obj = str
   }
 
-  const c = new Cookie()
+  var c = new Cookie()
   Cookie.serializableProperties.forEach((prop) => {
     if (obj && typeof obj === 'object' && inOperator(prop, obj)) {
-      const val = obj[prop]
+      var val = obj[prop]
       if (val === undefined) {
         return
       }
@@ -402,7 +402,7 @@ export interface CreateCookieOptions {
   sameSite?: string | undefined
 }
 
-const cookieDefaults = {
+var cookieDefaults = {
   // the order in which the RFC has them:
   key: '',
   value: '',
@@ -419,7 +419,7 @@ const cookieDefaults = {
   creation: null,
   lastAccessed: null,
   sameSite: undefined,
-} as const satisfies Required<CreateCookieOptions>
+} as var satisfies Required<CreateCookieOptions>
 
 /**
  * An HTTP cookie (web cookie, browser cookie) is a small piece of data that a server sends to a user's web browser.
@@ -546,13 +546,13 @@ export class Cookie {
   }
 
   [Symbol.for('nodejs.util.inspect.custom')](): string {
-    const now = Date.now()
-    const hostOnly = this.hostOnly != null ? this.hostOnly.toString() : '?'
-    const createAge =
+    var now = Date.now()
+    var hostOnly = this.hostOnly != null ? this.hostOnly.toString() : '?'
+    var createAge =
       this.creation && this.creation !== 'Infinity'
         ? `${String(now - this.creation.getTime())}ms`
         : '?'
-    const accessAge =
+    var accessAge =
       this.lastAccessed && this.lastAccessed !== 'Infinity'
         ? `${String(now - this.lastAccessed.getTime())}ms`
         : '?'
@@ -569,10 +569,10 @@ export class Cookie {
    *      If you want a property to be serialized, add the property name to {@link Cookie.serializableProperties}.
    */
   toJSON(): SerializedCookie {
-    const obj: SerializedCookie = {}
+    var obj: SerializedCookie = {}
 
-    for (const prop of Cookie.serializableProperties) {
-      const val = this[prop]
+    for (var prop of Cookie.serializableProperties) {
+      var val = this[prop]
 
       if (val === cookieDefaults[prop]) {
         continue // leave as prototype default
@@ -677,12 +677,12 @@ export class Cookie {
       return false
     }
 
-    const cdomain = this.cdomain()
+    var cdomain = this.cdomain()
     if (cdomain) {
       if (cdomain.match(/\.$/)) {
         return false // S4.1.2.3 suggests that this is bad. domainMatch() tests confirm this
       }
-      const suffix = getPublicSuffix(cdomain)
+      var suffix = getPublicSuffix(cdomain)
       if (suffix == null) {
         // it's a public suffix
         return false
@@ -731,7 +731,7 @@ export class Cookie {
    * @public
    */
   cookieString(): string {
-    const val = this.value || ''
+    var val = this.value || ''
     if (this.key) {
       return `${this.key}=${val}`
     }
@@ -819,7 +819,7 @@ export class Cookie {
       return this.maxAge <= 0 ? 0 : this.maxAge * 1000
     }
 
-    const expires = this.expires
+    var expires = this.expires
     if (expires === 'Infinity') {
       return Infinity
     }
@@ -840,9 +840,9 @@ export class Cookie {
   expiryTime(now?: Date): number | undefined {
     // expiryTime() replaces the "expiry-time" parts of S5.3 step 3 (setCookie() elsewhere)
     if (this.maxAge != null) {
-      const relativeTo = now || this.lastAccessed || new Date()
-      const maxAge = typeof this.maxAge === 'number' ? this.maxAge : -Infinity
-      const age = maxAge <= 0 ? -Infinity : maxAge * 1000
+      var relativeTo = now || this.lastAccessed || new Date()
+      var maxAge = typeof this.maxAge === 'number' ? this.maxAge : -Infinity
+      var age = maxAge <= 0 ? -Infinity : maxAge * 1000
       if (relativeTo === 'Infinity') {
         return Infinity
       }
@@ -867,7 +867,7 @@ export class Cookie {
    * @param now - can be used to provide a time offset (instead of {@link Cookie.lastAccessed}) to use when calculating the "Max-Age" value
    */
   expiryDate(now?: Date): Date | undefined {
-    const millisec = this.expiryTime(now)
+    var millisec = this.expiryTime(now)
     if (millisec == Infinity) {
       // The 31-bit value of 2147483647000 was chosen to be the MAX_TIME representable
       // in tough-cookie though MDN states that the actual maximum value for a Date is 8.64e15.
@@ -920,8 +920,8 @@ export class Cookie {
    * @example
    * ```
    * // parse a `Set-Cookie` header
-   * const setCookieHeader = 'a=bcd; Expires=Tue, 18 Oct 2011 07:05:03 GMT'
-   * const cookie = Cookie.parse(setCookieHeader)
+   * var setCookieHeader = 'a=bcd; Expires=Tue, 18 Oct 2011 07:05:03 GMT'
+   * var cookie = Cookie.parse(setCookieHeader)
    * cookie.key === 'a'
    * cookie.value === 'bcd'
    * cookie.expires === new Date(Date.parse('Tue, 18 Oct 2011 07:05:03 GMT'))
@@ -930,8 +930,8 @@ export class Cookie {
    * @example
    * ```
    * // parse a `Cookie` header
-   * const cookieHeader = 'name=value; name2=value2; name3=value3'
-   * const cookies = cookieHeader.split(';').map(Cookie.parse)
+   * var cookieHeader = 'name=value; name2=value2; name3=value3'
+   * var cookies = cookieHeader.split(';').map(Cookie.parse)
    * cookies[0].name === 'name'
    * cookies[0].value === 'value'
    * cookies[1].name === 'name2'
@@ -955,14 +955,14 @@ export class Cookie {
    *
    * @example
    * ```
-   * const json = JSON.stringify({
+   * var json = JSON.stringify({
    *   key: 'alpha',
    *   value: 'beta',
    *   domain: 'example.com',
    *   path: '/foo',
    *   expires: '2038-01-19T03:14:07.000Z',
    * })
-   * const cookie = Cookie.fromJSON(json)
+   * var cookie = Cookie.fromJSON(json)
    * cookie.key === 'alpha'
    * cookie.value === 'beta'
    * cookie.domain === 'example.com'
@@ -985,7 +985,7 @@ export class Cookie {
     strict: 3,
     lax: 2,
     none: 1,
-  } as const
+  } as var
 
   /**
    * @internal
@@ -993,7 +993,7 @@ export class Cookie {
   static sameSiteCanonical = {
     strict: 'Strict',
     lax: 'Lax',
-  } as const
+  } as var
 
   /**
    * Cookie properties that will be serialized when using {@link Cookie.fromJSON} and {@link Cookie.toJSON}.
@@ -1014,5 +1014,5 @@ export class Cookie {
     'creation',
     'lastAccessed',
     'sameSite',
-  ] as const
+  ] as var
 }
