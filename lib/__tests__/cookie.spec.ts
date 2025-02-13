@@ -33,7 +33,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { Cookie } from '../cookie/cookie.js'
 
 describe('Cookie', () => {
-  let cookie: Cookie
+  const cookie: Cookie
 
   describe('constructor', () => {
     beforeEach(() => {
