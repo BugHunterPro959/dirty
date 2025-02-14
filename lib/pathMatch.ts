@@ -20,7 +20,7 @@ export function pathMatch(reqPath: string, cookiePath: string): boolean {
     return true
   }
 
-  const idx = reqPath.indexOf(cookiePath)
+  let idx = reqPath.indexOf(cookiePath)
   if (idx === 0) {
     // "o  The cookie-path is a prefix of the request-path, and the last
     // character of the cookie-path is %x2F ("/")."
