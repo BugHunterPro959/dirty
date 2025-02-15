@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest'
 import { safeToString } from '../utils.js'
 
 describe('safeToString', () => {
-  let recursiveArray: unknown[] = [1]
+  const recursiveArray: unknown[] = [1]
   recursiveArray.push([[recursiveArray], 2, [[recursiveArray]]], 3)
 
-  let testCases = [
+  const testCases = [
     ['undefined', undefined, 'undefined'],
     ['null', null, 'null'],
     ['boolean', true, 'true'],
