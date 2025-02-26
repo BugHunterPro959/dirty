@@ -8,7 +8,7 @@ describe('MemoryCookieStore', () => {
   })
 
   it('should have instance methods that return promises', () => {
-    let memoryCookieStore = new MemoryCookieStore()
+    const memoryCookieStore = new MemoryCookieStore()
     expect(
       memoryCookieStore.findCookie('example.com', '/', 'key'),
     ).toBeInstanceOf(Promise)
