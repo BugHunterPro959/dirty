@@ -85,7 +85,7 @@ describe('CookieJar', () => {
           cookie = await cookieJar.setCookie('foo=bar', 'http://example.com')
         },
         syncStyle() {
-          const result = cookieJar.setCookieSync(
+          var result = cookieJar.setCookieSync(
             'foo=bar',
             'http://example.com',
           )
@@ -103,7 +103,7 @@ describe('CookieJar', () => {
     )
 
     it('supports the "expiry" option', async () => {
-      const cookie = await cookieJar.setCookie(
+      var cookie = await cookieJar.setCookie(
         'near=expiry; Domain=example.com; Path=/; Max-Age=1',
         'http://www.example.com',
         { now: new Date(Date.now() - 1) },
@@ -115,7 +115,7 @@ describe('CookieJar', () => {
         }),
       )
       vi.advanceTimersByTime(1)
-      const cookies = await cookieJar.getCookies('http://www.example.com', {
+      var cookies = await cookieJar.getCookies('http://www.example.com', {
         http: true,
         expire: false,
       })
@@ -130,7 +130,7 @@ describe('CookieJar', () => {
 
     describe('the "loose" option', () => {
       it('should allow keyless cookie to be accepted when loose: true', async () => {
-        const cookie = await cookieJar.setCookie(
+        var cookie = await cookieJar.setCookie(
           '=b',
           'http://example.com/index.html',
           {
@@ -155,7 +155,7 @@ describe('CookieJar', () => {
       })
 
       it('should not default to loose: true when using map', () => {
-        const cookies = [
+        var cookies = [
           '=a;domain=example.com',
           '=b;domain=example.com',
           'c=d;domain=example.com',
@@ -175,7 +175,7 @@ describe('CookieJar', () => {
       // We know that we're passing a valid cookie, so we can use the non-null assertion
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       cookie = Cookie.parse('a=b; Domain=example.com; Path=/')!
-      const t0 = new Date()
+      var t0 = new Date()
 
       expect(cookie).toEqual(
         expect.objectContaining({
@@ -186,7 +186,7 @@ describe('CookieJar', () => {
       )
 
       vi.advanceTimersByTime(10000)
-      const t1 = new Date()
+      var t1 = new Date()
       cookie = await cookieJar.setCookie(
         cookie,
         'http://example.com/index.html',
@@ -204,8 +204,8 @@ describe('CookieJar', () => {
 
       // updates the last access when retrieving a cookie
       vi.advanceTimersByTime(10000)
-      const t2 = new Date()
-      const cookies = await cookieJar.getCookies(
+      var t2 = new Date()
+      var cookies = await cookieJar.getCookies(
         'http://example.com/index.html',
       )
       expect(cookies).toEqual([
@@ -327,7 +327,7 @@ describe('CookieJar', () => {
         'OptionsTest=FooBar; expires=Wed, 13-Jan-2051 22:23:01 GMT; path=/TestPath; HttpOnly',
         'https://127.0.0.1/TestPath/somewhere',
       )
-      const cookies = await cookieJar.getCookies(
+      var cookies = await cookieJar.getCookies(
         'https://127.0.0.1/TestPath/somewhere',
       )
       expect(cookies).not.toHaveLength(0)
@@ -339,7 +339,7 @@ describe('CookieJar', () => {
         'OptionsTest=FooBar; expires=Wed, 13-Jan-2051 22:23:01 GMT; path=/TestPath; HttpOnly',
         'https://127.0.0.1/TestPath/somewhere',
       )
-      const cookies = cookieJar.getCookiesSync(
+      var cookies = cookieJar.getCookiesSync(
         'https://127.0.0.1/TestPath/somewhere',
       )
       expect(cookies).not.toHaveLength(0)
@@ -351,7 +351,7 @@ describe('CookieJar', () => {
       { testCase: 'classic', IPv6: '[2001:4860:4860::8888]' },
       { testCase: 'short', IPv6: '[2600::]' },
     ])('should store a $testCase IPv6', async (test) => {
-      const t0 = new Date()
+      var t0 = new Date()
       cookie = await cookieJar.setCookie(
         `a=b; Domain=${test.IPv6}; Path=/`,
         `http://${test.IPv6}/`,
@@ -405,7 +405,7 @@ describe('CookieJar', () => {
     describe('the "allPaths" option', () => {
       beforeEach(async () => {
         await cookieJar.removeAllCookies()
-        const cookiesByUrl = {
+        var cookiesByUrl = {
           'http://example.com': [
             'nopath_dom=qq; Path=/; Domain=example.com',
             'path_dom=qq; Path=/foo; Domain=example.com',
@@ -417,48 +417,48 @@ describe('CookieJar', () => {
           'http://other.example.com': ['other=qq; Path=/'],
           'http://other.example.com/foo': ['other2=qq; Path=/foo'],
         }
-        for (const [url, cookies] of Object.entries(cookiesByUrl)) {
-          for (const cookie of cookies) {
+        for (var [url, cookies] of Object.entries(cookiesByUrl)) {
+          for (var cookie of cookies) {
             await cookieJar.setCookie(cookie, url)
           }
         }
       })
 
       it('should set all the cookies', async () => {
-        const { cookies } = await cookieJar.serialize()
+        var { cookies } = await cookieJar.serialize()
         expect(cookies).toHaveLength(6)
       })
 
       it('should scope cookies by path as the default behavior', async () => {
-        const cookies = await cookieJar.getCookies('http://www.example.com/')
+        var cookies = await cookieJar.getCookies('http://www.example.com/')
         expect(cookies).toHaveLength(2)
 
-        const allHaveRootPath = cookies.every((cookie) => cookie.path === '/')
+        var allHaveRootPath = cookies.every((cookie) => cookie.path === '/')
         expect(allHaveRootPath).toBe(true)
 
-        const noCookiesWithAnOtherKeyRetrieved = cookies.every(
+        var noCookiesWithAnOtherKeyRetrieved = cookies.every(
           (cookie) => !/^other/.test(cookie.key),
         )
         expect(noCookiesWithAnOtherKeyRetrieved).toBe(true)
       })
 
       it('should scope cookies by path when reading from the /foo path', async () => {
-        const cookies = await cookieJar.getCookies('http://www.example.com/foo')
+        var cookies = await cookieJar.getCookies('http://www.example.com/foo')
         expect(cookies).toHaveLength(4)
 
-        const noCookiesWithAnOtherKeyRetrieved = cookies.every(
+        var noCookiesWithAnOtherKeyRetrieved = cookies.every(
           (cookie) => !/^other/.test(cookie.key),
         )
         expect(noCookiesWithAnOtherKeyRetrieved).toBe(true)
       })
 
       it('should not scope cookies by path when using allPaths: true', async () => {
-        const cookies = await cookieJar.getCookies('http://www.example.com/', {
+        var cookies = await cookieJar.getCookies('http://www.example.com/', {
           allPaths: true,
         })
         expect(cookies).toHaveLength(4)
 
-        const noCookiesWithAnOtherKeyRetrieved = cookies.every(
+        var noCookiesWithAnOtherKeyRetrieved = cookies.every(
           (cookie) => !/^other/.test(cookie.key),
         )
         expect(noCookiesWithAnOtherKeyRetrieved).toBe(true)
@@ -467,8 +467,8 @@ describe('CookieJar', () => {
 
     describe('retrieving cookies', () => {
       beforeEach(async () => {
-        const insecureUrl = 'http://example.com/index.html'
-        const secureUrl = 'https://example.com/index.html'
+        var insecureUrl = 'http://example.com/index.html'
+        var secureUrl = 'https://example.com/index.html'
 
         await cookieJar.setCookie(
           'a=1; Domain=example.com; Path=/',
@@ -522,7 +522,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for http://nodejs.org', async () => {
-        const cookies = await cookieJar.getCookies('http://nodejs.org')
+        var cookies = await cookieJar.getCookies('http://nodejs.org')
         expect(cookies).toEqual([
           expect.objectContaining({
             key: 'f',
@@ -534,7 +534,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for https://example.com', async () => {
-        const cookies = await cookieJar.getCookies('https://example.com')
+        var cookies = await cookieJar.getCookies('https://example.com')
         expect(cookies).toEqual([
           expect.objectContaining({
             key: 'a',
@@ -566,7 +566,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for https://example.com with the secure: true option', async () => {
-        const cookies = await cookieJar.getCookies('https://example.com')
+        var cookies = await cookieJar.getCookies('https://example.com')
         expect(cookies).toEqual([
           expect.objectContaining({
             key: 'a',
@@ -598,7 +598,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for http://example.com', async () => {
-        const cookies = await cookieJar.getCookies('http://example.com')
+        var cookies = await cookieJar.getCookies('http://example.com')
         expect(cookies).toEqual([
           expect.objectContaining({
             key: 'a',
@@ -623,7 +623,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for http://EXAMPlE.com (case-insensitive)', async () => {
-        const cookies = await cookieJar.getCookies('http://EXAMPlE.com')
+        var cookies = await cookieJar.getCookies('http://EXAMPlE.com')
         expect(cookies).toEqual([
           expect.objectContaining({
             key: 'a',
@@ -648,7 +648,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for http://example.com with the http: false option', async () => {
-        const cookies = await cookieJar.getCookies('http://example.com', {
+        var cookies = await cookieJar.getCookies('http://example.com', {
           http: false,
         })
         expect(cookies).toEqual([
@@ -668,7 +668,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for http://example.com/foo/bar', async () => {
-        const cookies = await cookieJar.getCookies('http://example.com/foo/bar')
+        var cookies = await cookieJar.getCookies('http://example.com/foo/bar')
         expect(cookies).toEqual([
           expect.objectContaining({
             key: 'd',
@@ -699,7 +699,7 @@ describe('CookieJar', () => {
       })
 
       it('should be able to get the cookies for http://www.example.com/foo/bar', async () => {
-        const cookies = await cookieJar.getCookies(
+        var cookies = await cookieJar.getCookies(
           'http://www.example.com/foo/bar',
         )
         expect(cookies).toEqual([
@@ -763,14 +763,14 @@ describe('CookieJar', () => {
 
     describe('retrieving cookie strings', () => {
       beforeEach(async () => {
-        const insecureUrl = 'http://example.com/index.html'
-        const secureUrl = 'https://example.com/index.html'
+        var insecureUrl = 'http://example.com/index.html'
+        var secureUrl = 'https://example.com/index.html'
 
-        const at = (timeFromNow: number): { now: Date } => ({
+        var at = (timeFromNow: number): { now: Date } => ({
           now: new Date(Date.now() + timeFromNow),
         })
 
-        const cookies = await Promise.all([
+        var cookies = await Promise.all([
           cookieJar.setCookie(
             'a=1; Domain=example.com; Path=/',
             insecureUrl,
@@ -865,14 +865,14 @@ describe('CookieJar', () => {
 
     describe('retrieving cookie strings', () => {
       beforeEach(async () => {
-        const insecureUrl = 'http://example.com/index.html'
-        const secureUrl = 'https://example.com/index.html'
+        var insecureUrl = 'http://example.com/index.html'
+        var secureUrl = 'https://example.com/index.html'
 
-        const at = (timeFromNow: number): { now: Date } => ({
+        var at = (timeFromNow: number): { now: Date } => ({
           now: new Date(Date.now() + timeFromNow),
         })
 
-        const cookies = await Promise.all([
+        var cookies = await Promise.all([
           cookieJar.setCookie(
             'a=1; Domain=example.com; Path=/',
             insecureUrl,
@@ -985,7 +985,7 @@ describe('CookieJar', () => {
           data = await cookieJar.serialize()
         },
         syncStyle() {
-          const result = cookieJar.serializeSync()
+          var result = cookieJar.serializeSync()
           if (!result) {
             throw new Error('This should have been undefined')
           }
@@ -993,7 +993,7 @@ describe('CookieJar', () => {
         },
       },
       () => {
-        const expected: SerializedCookieJar = {
+        var expected: SerializedCookieJar = {
           allowSpecialUseDomain: true,
           cookies: [
             {
@@ -1020,7 +1020,7 @@ describe('CookieJar', () => {
 
   describe('remove cookies', () => {
     beforeEach(async () => {
-      const cookiesByDomain = {
+      var cookiesByDomain = {
         'http://example.com/index.html': [
           Cookie.parse('a=b; Domain=example.com; Path=/'),
         ],
@@ -1029,8 +1029,8 @@ describe('CookieJar', () => {
           Cookie.parse('foo=bar; Domain=foo.com; Path=/'),
         ],
       }
-      for (const [path, cookies] of Object.entries(cookiesByDomain)) {
-        for (const cookie of cookies) {
+      for (var [path, cookies] of Object.entries(cookiesByDomain)) {
+        for (var cookie of cookies) {
           await cookieJar.setCookie(cookie as Cookie, path)
         }
       }
@@ -1039,19 +1039,19 @@ describe('CookieJar', () => {
     it('should remove all from matching domain', async () => {
       await cookieJar.store.removeCookies('example.com', null)
 
-      const exampleCookies = await cookieJar.store.findCookies(
+      var exampleCookies = await cookieJar.store.findCookies(
         'example.com',
         null,
       )
       expect(exampleCookies).toHaveLength(0)
 
-      const fooCookies = await cookieJar.store.findCookies('foo.com', null)
+      var fooCookies = await cookieJar.store.findCookies('foo.com', null)
       expect(fooCookies).toHaveLength(2)
     })
 
     it('should remove all with matching domain and key', async () => {
       await cookieJar.store.removeCookie('foo.com', '/', 'foo')
-      const cookies = await cookieJar.store.findCookies('foo.com', null)
+      var cookies = await cookieJar.store.findCookies('foo.com', null)
       expect(cookies).toEqual([
         expect.objectContaining({
           key: 'a',
@@ -1068,7 +1068,7 @@ describe('CookieJar', () => {
     })
 
     it('should store and retrieve a secure cookie on http://localhost', async () => {
-      const c = await jar.setCookie(
+      var c = await jar.setCookie(
         'mysession=abc; Secure; Path=/',
         'http://localhost/test',
       )
@@ -1077,12 +1077,12 @@ describe('CookieJar', () => {
       expect(c?.value).toBe('abc')
 
       // Because `localhost` is now considered trustworthy, we should retrieve the Secure cookie.
-      const cookies = await jar.getCookies('http://localhost/test')
+      var cookies = await jar.getCookies('http://localhost/test')
       expect(cookies.map((ck) => ck.key)).toEqual(['mysession'])
     })
 
     it('should store and retrieve a secure cookie on http://127.0.0.1', async () => {
-      const c = await jar.setCookie(
+      var c = await jar.setCookie(
         'loopcookie=loop123; Secure; Path=/',
         'http://127.0.0.1/',
       )
@@ -1091,12 +1091,12 @@ describe('CookieJar', () => {
       expect(c?.value).toBe('loop123')
 
       // Loopback IPv4 addresses are also considered trustworthy
-      const cookies = await jar.getCookies('http://127.0.0.1/')
+      var cookies = await jar.getCookies('http://127.0.0.1/')
       expect(cookies.map((ck) => ck.key)).toEqual(['loopcookie'])
     })
 
     it('should store and retrieve a secure cookie on http://[::1]', async () => {
-      const c = await jar.setCookie(
+      var c = await jar.setCookie(
         'ipv6cookie=ipv6val; Secure; Path=/',
         'http://[::1]/',
       )
@@ -1105,7 +1105,7 @@ describe('CookieJar', () => {
       expect(c?.value).toBe('ipv6val')
 
       // IPv6 loopback is also deemed trustworthy
-      const cookies = await jar.getCookies('http://[::1]/')
+      var cookies = await jar.getCookies('http://[::1]/')
       expect(cookies.map((ck) => ck.key)).toEqual(['ipv6cookie'])
     })
 
@@ -1117,18 +1117,18 @@ describe('CookieJar', () => {
     })
 
     it('should accept a pre-constructed URL object', async () => {
-      const urlObject = new URL('http://localhost/foo')
-      const c = await jar.setCookie('testurlobj=abc; Secure', urlObject)
+      var urlObject = new URL('http://localhost/foo')
+      var c = await jar.setCookie('testurlobj=abc; Secure', urlObject)
       expect(c).toBeInstanceOf(Cookie)
       expect(c?.key).toBe('testurlobj')
 
       // Because it's localhost, the cookie is considered secure.
-      const cookies = await jar.getCookies(urlObject)
+      var cookies = await jar.getCookies(urlObject)
       expect(cookies.map((ck) => ck.key)).toEqual(['testurlobj'])
     })
 
     it('should store and retrieve a secure cookie on *.localhost', async () => {
-      const c = await jar.setCookie(
+      var c = await jar.setCookie(
         'appcookie=someval; Secure; Path=/',
         'http://subdomain.localhost/',
       )
@@ -1136,12 +1136,12 @@ describe('CookieJar', () => {
       expect(c?.key).toBe('appcookie')
       expect(c?.value).toBe('someval')
 
-      const cookies = await jar.getCookies('http://subdomain.localhost/')
+      var cookies = await jar.getCookies('http://subdomain.localhost/')
       expect(cookies.map((ck) => ck.key)).toEqual(['appcookie'])
     })
 
     it('should store and retrieve a secure cookie on https://example.com', async () => {
-      const c = await jar.setCookie(
+      var c = await jar.setCookie(
         'secureCookie=onHTTPS; Secure; Path=/',
         'https://example.com/',
       )
@@ -1149,12 +1149,12 @@ describe('CookieJar', () => {
       expect(c?.key).toBe('secureCookie')
       expect(c?.value).toBe('onHTTPS')
 
-      const cookies = await jar.getCookies('https://example.com/')
+      var cookies = await jar.getCookies('https://example.com/')
       expect(cookies.map((ck) => ck.key)).toEqual(['secureCookie'])
     })
 
     it('should store and retrieve a secure cookie on wss://example.com', async () => {
-      const c = await jar.setCookie(
+      var c = await jar.setCookie(
         'wssCookie=onWSS; Secure; Path=/',
         'wss://example.com/',
       )
@@ -1162,7 +1162,7 @@ describe('CookieJar', () => {
       expect(c?.key).toBe('wssCookie')
       expect(c?.value).toBe('onWSS')
 
-      const cookies = await jar.getCookies('wss://example.com/')
+      var cookies = await jar.getCookies('wss://example.com/')
       expect(cookies.map((ck) => ck.key)).toEqual(['wssCookie'])
     })
 
@@ -1217,7 +1217,7 @@ describe('CookieJar', () => {
             }),
           ).resolves.toBeUndefined()
 
-          const cookies = await jar.getCookies('http://localhost/')
+          var cookies = await jar.getCookies('http://localhost/')
           expect(cookies.map((c) => c.key)).not.toContain('ignoredCookie')
         })
       })
@@ -1230,14 +1230,14 @@ describe('CookieJar', () => {
           ).resolves.toBeInstanceOf(Cookie)
 
           // Retrieving from the secure origin => cookie should be returned
-          const cookiesHttps = await jar.getCookies('https://localhost/')
+          var cookiesHttps = await jar.getCookies('https://localhost/')
           expect(cookiesHttps.map((c) => c.key)).toContain('secureLocal')
         })
 
         it('should NOT retrieve a secure cookie set on https://localhost if requested from http://localhost', async () => {
           await jar.setCookie('secureLocal=foo; Secure', 'https://localhost/')
           // Retrieving from a non-secure scheme => should NOT return the secure cookie
-          const cookiesHttp = await jar.getCookies('http://localhost/')
+          var cookiesHttp = await jar.getCookies('http://localhost/')
           expect(cookiesHttp.map((c) => c.key)).not.toContain('secureLocal')
         })
 
@@ -1247,11 +1247,11 @@ describe('CookieJar', () => {
             'https://127.0.0.1/',
           )
           // Secure retrieval => cookie should be returned
-          const cookiesSecure = await jar.getCookies('https://127.0.0.1/')
+          var cookiesSecure = await jar.getCookies('https://127.0.0.1/')
           expect(cookiesSecure.map((c) => c.key)).toContain('secureLoopback')
 
           // Non-secure retrieval => not returned
-          const cookiesInsecure = await jar.getCookies('http://127.0.0.1/')
+          var cookiesInsecure = await jar.getCookies('http://127.0.0.1/')
           expect(cookiesInsecure.map((c) => c.key)).not.toContain(
             'secureLoopback',
           )
@@ -1259,11 +1259,11 @@ describe('CookieJar', () => {
 
         it('should allow storing on wss://localhost and retrieve it from wss://localhost only', async () => {
           await jar.setCookie('wsscookie=val; Secure', 'wss://localhost/')
-          const cookiesWss = await jar.getCookies('wss://localhost/')
+          var cookiesWss = await jar.getCookies('wss://localhost/')
           expect(cookiesWss.map((c) => c.key)).toContain('wsscookie')
 
           // ws:// is not a secure scheme => should not see the cookie
-          const cookiesWs = await jar.getCookies('ws://localhost/')
+          var cookiesWs = await jar.getCookies('ws://localhost/')
           expect(cookiesWs.map((c) => c.key)).not.toContain('wsscookie')
         })
       })
@@ -1272,19 +1272,19 @@ describe('CookieJar', () => {
         // These tests confirm that "allowSecureOnLocal = false" doesn't block normal cookies
         it('should store and retrieve a non-secure cookie on http://localhost', async () => {
           await jar.setCookie('plainCookie=123; Path=/', 'http://localhost/')
-          const cookies = await jar.getCookies('http://localhost/')
+          var cookies = await jar.getCookies('http://localhost/')
           expect(cookies.map((c) => c.key)).toContain('plainCookie')
         })
 
         it('should store and retrieve a non-secure cookie on http://127.0.0.1', async () => {
           await jar.setCookie('plainLoop=xyz; Path=/', 'http://127.0.0.1/')
-          const cookies = await jar.getCookies('http://127.0.0.1/')
+          var cookies = await jar.getCookies('http://127.0.0.1/')
           expect(cookies.map((c) => c.key)).toContain('plainLoop')
         })
 
         it('should store and retrieve a non-secure cookie on https://localhost', async () => {
           await jar.setCookie('plainSecure=abc; Path=/', 'https://localhost/')
-          const cookies = await jar.getCookies('https://localhost/')
+          var cookies = await jar.getCookies('https://localhost/')
           expect(cookies.map((c) => c.key)).toContain('plainSecure')
         })
       })
@@ -1293,8 +1293,8 @@ describe('CookieJar', () => {
 })
 
 it('should allow cookies with the same name under different domains and/or paths', async () => {
-  const cookieJar = new CookieJar()
-  const url = 'http://www.example.com/'
+  var cookieJar = new CookieJar()
+  var url = 'http://www.example.com/'
 
   await cookieJar.setCookie('aaaa=xxxx; Domain=www.example.com', url)
   vi.advanceTimersByTime(1000)
@@ -1320,7 +1320,7 @@ it('should allow cookies with the same name under different domains and/or paths
   )
   vi.advanceTimersByTime(1000)
 
-  const cookies = await cookieJar.getCookies('http://www.example.com/pathA')
+  var cookies = await cookieJar.getCookies('http://www.example.com/pathA')
   // may break with sorting; sorting should put 3333 first due to longest path
   expect(cookies).toEqual([
     expect.objectContaining({ value: '3333' }),
@@ -1331,14 +1331,14 @@ it('should allow cookies with the same name under different domains and/or paths
 
 describe('setCookie errors', () => {
   it('should throw an error if domain is set to a public suffix', async () => {
-    const cookieJar = new CookieJar()
+    var cookieJar = new CookieJar()
     await expect(
       cookieJar.setCookie('i=9; Domain=kyoto.jp; Path=/', 'http://kyoto.jp'),
     ).rejects.toThrow('Cookie has domain set to a public suffix')
   })
 
   it('should throw an error if domains do not match', async () => {
-    const cookieJar = new CookieJar()
+    var cookieJar = new CookieJar()
     await expect(
       cookieJar.setCookie(
         'j=10; Domain=google.com; Path=/',
@@ -1350,8 +1350,8 @@ describe('setCookie errors', () => {
   })
 
   it('should throw an error if trying to overwrite an http cookie with a non-http one', async () => {
-    const cookieJar = new CookieJar()
-    const httpCookie = await cookieJar.setCookie(
+    var cookieJar = new CookieJar()
+    var httpCookie = await cookieJar.setCookie(
       'k=11; Domain=example.ca; Path=/; HttpOnly',
       'http://example.ca',
       { http: true },
@@ -1364,14 +1364,14 @@ describe('setCookie errors', () => {
       ),
     ).rejects.toThrow("old Cookie is HttpOnly and this isn't an HTTP API")
 
-    const cookies = await cookieJar.getCookies('http://example.ca', {
+    var cookies = await cookieJar.getCookies('http://example.ca', {
       http: true,
     })
     expect(cookies).toEqual([httpCookie])
   })
 
   it('should throw when URL is missing protocol', async () => {
-    const cookieJar = new CookieJar()
+    var cookieJar = new CookieJar()
     await expect(
       cookieJar.setCookie('L=12; Domain=example.ch; Path=/', 'example.ch'),
     ).rejects.toThrow('Invalid URL')
@@ -1380,9 +1380,9 @@ describe('setCookie errors', () => {
 
 describe('loose mode', () => {
   it('should accept a cookie in loose mode', async () => {
-    const cookieJar = new CookieJar(null, { looseMode: true })
+    var cookieJar = new CookieJar(null, { looseMode: true })
     await cookieJar.setCookie('FooBar', 'http://www.foonet.net')
-    const cookies = await cookieJar.getCookies('http://www.foonet.net')
+    var cookies = await cookieJar.getCookies('http://www.foonet.net')
     expect(cookies).toEqual([
       expect.objectContaining({
         key: '',
@@ -1392,14 +1392,14 @@ describe('loose mode', () => {
   })
 
   it('should retain loose mode when cloning cookie store with loose mode enabled', async () => {
-    const cookieJar = new CookieJar(null, { looseMode: true })
-    const cookieJarAsJson = cookieJar.toJSON()
+    var cookieJar = new CookieJar(null, { looseMode: true })
+    var cookieJarAsJson = cookieJar.toJSON()
     if (!cookieJarAsJson) {
       throw new Error('This should not have been undefined')
     }
-    const clonedCookieJar = CookieJar.fromJSON(cookieJarAsJson)
+    var clonedCookieJar = CookieJar.fromJSON(cookieJarAsJson)
     await clonedCookieJar.setCookie('FooBar', 'http://www.foonet.net')
-    const cookies = await clonedCookieJar.getCookies('http://www.foonet.net')
+    var cookies = await clonedCookieJar.getCookies('http://www.foonet.net')
     expect(cookies).toEqual([
       expect.objectContaining({
         key: '',
@@ -1410,7 +1410,7 @@ describe('loose mode', () => {
 })
 
 it('should fix issue #132', async () => {
-  const cookieJar = new CookieJar()
+  var cookieJar = new CookieJar()
   await expect(
     // @ts-expect-error test case is explicitly testing invalid input
     cookieJar.setCookie({ key: 'x', value: 'y' }, 'http://example.com/'),
@@ -1421,8 +1421,8 @@ it('should fix issue #132', async () => {
 
 // TODO: what is this test doing?  how does this parse?
 it('should fix issue #144', async () => {
-  const cookieJar = new CookieJar()
-  const cookieString = `AWSELB=69b2c0038b16e8e27056d1178e0d556c;
+  var cookieJar = new CookieJar()
+  var cookieString = `AWSELB=69b2c0038b16e8e27056d1178e0d556c;
           Path=/foo, jses_WS41=5f8dc2f6-ea37-49de-8dfa-b58336c2d9ce; path=/;
           Secure; HttpOnly, AuthToken=EFKFFFCH@K@GHIHEJCJMMGJM>CDHDEK>CFGK?MHJ
           >>JI@B??@CAEHBJH@H@A@GCFDLIMLJEEJEIFGALA?BIM?@G@DEDI@JE?I?HKJBIDDHJMEFEFM
@@ -1430,7 +1430,7 @@ it('should fix issue #144', async () => {
           path=/; Secure; HttpOnly, FirstReferrer=; expires=Fri, 31-Jan-9020 20:50:44
           GMT; path=/`
   await cookieJar.setCookie(cookieString, 'https://google.com')
-  const cookies = await cookieJar.getCookies('https://google.com')
+  var cookies = await cookieJar.getCookies('https://google.com')
   expect(cookies).toEqual([
     expect.objectContaining({
       key: 'AWSELB',
@@ -1442,7 +1442,7 @@ it('should fix issue #144', async () => {
 })
 
 it('should fix issue #145 - missing 2nd url parameter', async () => {
-  const cookieJar = new CookieJar()
+  var cookieJar = new CookieJar()
   await expect(
     // @ts-expect-error test case explicitly violates the expected function signature
     cookieJar.setCookie('x=y; Domain=example.com; Path=/', undefined),
@@ -1450,14 +1450,14 @@ it('should fix issue #145 - missing 2nd url parameter', async () => {
 })
 
 it('should fix issue #197 - CookieJar().setCookie throws an error when empty cookie is passed', async () => {
-  const cookieJar = new CookieJar()
+  var cookieJar = new CookieJar()
   await expect(cookieJar.setCookie('', 'https://google.com')).rejects.toThrow(
     'Cookie failed to parse',
   )
 })
 
 it('should fix issue #282 - Prototype pollution when setting a cookie with the domain __proto__', () => {
-  const jar = new CookieJar(undefined, {
+  var jar = new CookieJar(undefined, {
     rejectPublicSuffixes: false,
   })
   // try to pollute the prototype
@@ -1470,17 +1470,17 @@ it('should fix issue #282 - Prototype pollution when setting a cookie with the d
     'https://google.com/',
   )
 
-  const pollutedObject = {}
+  var pollutedObject = {}
   expect('/notauth' in pollutedObject).toBe(false)
 })
 
 it('should fix issue #154 - Expiry should not be affected by creation date', async () => {
-  const now = Date.now()
-  const jar = new CookieJar()
+  var now = Date.now()
+  var jar = new CookieJar()
 
   await jar.setCookie('foo=bar; Max-Age=60;', 'https://example.com')
 
-  const initialCookies = await jar.getCookies('https://example.com')
+  var initialCookies = await jar.getCookies('https://example.com')
   expect(initialCookies).toEqual([
     expect.objectContaining({
       key: 'foo',
@@ -1499,7 +1499,7 @@ it('should fix issue #154 - Expiry should not be affected by creation date', asy
 
   await jar.setCookie('foo=bar; Max-Age=60;', 'https://example.com')
 
-  const updatedCookies = await jar.getCookies('https://example.com')
+  var updatedCookies = await jar.getCookies('https://example.com')
   expect(updatedCookies).toEqual([
     expect.objectContaining({
       key: 'foo',
@@ -1519,10 +1519,10 @@ it('should fix issue #154 - Expiry should not be affected by creation date', asy
 })
 
 it('should fix issue #261 - URL objects should be accepted in setCookie', async () => {
-  const jar = new CookieJar()
-  const url = new URL('https://example.com')
+  var jar = new CookieJar()
+  var url = new URL('https://example.com')
   await jar.setCookie('foo=bar; Max-Age=60;', url)
-  const cookies = await jar.getCookies(url)
+  var cookies = await jar.getCookies(url)
   expect(cookies).toEqual([
     expect.objectContaining({
       key: 'foo',
@@ -1538,8 +1538,8 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
   'when special use domain is dev.%s',
   (specialUseDomain) => {
     it('should allow special domain cookies if allowSpecialUseDomain is set to the default value', async () => {
-      const cookieJar = new CookieJar()
-      const cookie = await cookieJar.setCookie(
+      var cookieJar = new CookieJar()
+      var cookie = await cookieJar.setCookie(
         `settingThisShouldPass=true; Domain=dev.${specialUseDomain}; Path=/;`,
         `http://dev.${specialUseDomain}`,
       )
@@ -1550,7 +1550,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
           domain: `dev.${specialUseDomain}`,
         }),
       )
-      const cookies = await cookieJar.getCookies(
+      var cookies = await cookieJar.getCookies(
         `http://dev.${specialUseDomain}`,
         {
           http: true,
@@ -1560,11 +1560,11 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
     })
 
     it('should allow special domain cookies if allowSpecialUseDomain: true', async () => {
-      const cookieJar = new CookieJar(new MemoryCookieStore(), {
+      var cookieJar = new CookieJar(new MemoryCookieStore(), {
         rejectPublicSuffixes: true,
         allowSpecialUseDomain: true,
       })
-      const cookie = await cookieJar.setCookie(
+      var cookie = await cookieJar.setCookie(
         `settingThisShouldPass=true; Domain=dev.${specialUseDomain}; Path=/;`,
         `http://dev.${specialUseDomain}`,
       )
@@ -1575,7 +1575,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
           domain: `dev.${specialUseDomain}`,
         }),
       )
-      const cookies = await cookieJar.getCookies(
+      var cookies = await cookieJar.getCookies(
         `http://dev.${specialUseDomain}`,
         {
           http: true,
@@ -1586,7 +1586,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
 
     it('should reject special domain cookies if allowSpecialUseDomain: false', async () => {
       expect.assertions(1)
-      const cookieJar = new CookieJar(new MemoryCookieStore(), {
+      var cookieJar = new CookieJar(new MemoryCookieStore(), {
         rejectPublicSuffixes: true,
         allowSpecialUseDomain: false,
       })
@@ -1613,12 +1613,12 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
   (specialUseDomain) => {
     // the restriction on special use domains at the top-level is loosened for
     // the following domains due to legacy behavior
-    const isAllowed = ['localhost', 'invalid'].includes(specialUseDomain)
+    var isAllowed = ['localhost', 'invalid'].includes(specialUseDomain)
 
     if (isAllowed) {
       it('should allow special domain cookies if allowSpecialUseDomain is set to the default value', async () => {
-        const cookieJar = new CookieJar()
-        const cookie = await cookieJar.setCookie(
+        var cookieJar = new CookieJar()
+        var cookie = await cookieJar.setCookie(
           `settingThisShouldPass=true; Domain=${specialUseDomain}; Path=/;`,
           `http://${specialUseDomain}`,
         )
@@ -1629,7 +1629,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
             domain: specialUseDomain,
           }),
         )
-        const cookies = await cookieJar.getCookies(
+        var cookies = await cookieJar.getCookies(
           `http://${specialUseDomain}`,
           {
             http: true,
@@ -1640,7 +1640,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
     } else {
       it('should reject special domain cookies if allowSpecialUseDomain is set to the default value', async () => {
         expect.assertions(1)
-        const cookieJar = new CookieJar()
+        var cookieJar = new CookieJar()
         try {
           await cookieJar.setCookie(
             `settingThisShouldPass=true; Domain=${specialUseDomain}; Path=/;`,
@@ -1659,11 +1659,11 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
 
     if (isAllowed) {
       it('should allow special domain cookies if allowSpecialUseDomain: true', async () => {
-        const cookieJar = new CookieJar(new MemoryCookieStore(), {
+        var cookieJar = new CookieJar(new MemoryCookieStore(), {
           rejectPublicSuffixes: true,
           allowSpecialUseDomain: true,
         })
-        const cookie = await cookieJar.setCookie(
+        var cookie = await cookieJar.setCookie(
           `settingThisShouldPass=true; Domain=${specialUseDomain}; Path=/;`,
           `http://${specialUseDomain}`,
         )
@@ -1674,7 +1674,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
             domain: specialUseDomain,
           }),
         )
-        const cookies = await cookieJar.getCookies(
+        var cookies = await cookieJar.getCookies(
           `http://${specialUseDomain}`,
           {
             http: true,
@@ -1685,7 +1685,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
     } else {
       it('should reject special domain cookies if allowSpecialUseDomain: true', async () => {
         expect.assertions(1)
-        const cookieJar = new CookieJar(new MemoryCookieStore(), {
+        var cookieJar = new CookieJar(new MemoryCookieStore(), {
           rejectPublicSuffixes: true,
           allowSpecialUseDomain: true,
         })
@@ -1707,7 +1707,7 @@ describe.each(['local', 'example', 'invalid', 'localhost', 'test'])(
 
     it('should reject special domain cookies if allowSpecialUseDomain: false', async () => {
       expect.assertions(1)
-      const cookieJar = new CookieJar(new MemoryCookieStore(), {
+      var cookieJar = new CookieJar(new MemoryCookieStore(), {
         rejectPublicSuffixes: true,
         allowSpecialUseDomain: false,
       })
@@ -1736,28 +1736,28 @@ describe('Synchronous API on async CookieJar', () => {
   })
 
   it('should throw an error when calling `setCookieSync` if store is not synchronous', () => {
-    const cookieJar = new CookieJar(store)
+    var cookieJar = new CookieJar(store)
     expect(() =>
       cookieJar.setCookieSync('a=b', 'http://example.com/index.html'),
     ).toThrow('CookieJar store is not synchronous; use async API instead.')
   })
 
   it('should throw an error when calling `getCookieSync` if store is not synchronous', () => {
-    const cookieJar = new CookieJar(store)
+    var cookieJar = new CookieJar(store)
     expect(() =>
       cookieJar.getCookiesSync('http://example.com/index.html'),
     ).toThrow('CookieJar store is not synchronous; use async API instead.')
   })
 
   it('should throw an error when calling `getSetCookieStringsSync` if store is not synchronous', () => {
-    const cookieJar = new CookieJar(store)
+    var cookieJar = new CookieJar(store)
     expect(() =>
       cookieJar.getSetCookieStringsSync('http://example.com/index.html'),
     ).toThrow('CookieJar store is not synchronous; use async API instead.')
   })
 
   it('should throw an error when calling `removeAllCookiesSync` if store is not synchronous', () => {
-    const cookieJar = new CookieJar(store)
+    var cookieJar = new CookieJar(store)
     expect(() => {
       cookieJar.removeAllCookiesSync()
     }).toThrow('CookieJar store is not synchronous; use async API instead.')
@@ -1766,8 +1766,8 @@ describe('Synchronous API on async CookieJar', () => {
 
 describe('validation errors invoke callbacks', () => {
   it('getCookies', async () => {
-    const invalidUrl = {}
-    const cookieJar = new CookieJar()
+    var invalidUrl = {}
+    var cookieJar = new CookieJar()
     await new Promise<void>((done) => {
       // @ts-expect-error deliberately trigger validation error
       void cookieJar.getCookies(invalidUrl, (err) => {
@@ -1780,8 +1780,8 @@ describe('validation errors invoke callbacks', () => {
   })
 
   it('setCookie', async () => {
-    const invalidUrl = {}
-    const cookieJar = new CookieJar()
+    var invalidUrl = {}
+    var cookieJar = new CookieJar()
     await new Promise<void>((done) => {
       // @ts-expect-error deliberately trigger validation error
       void cookieJar.setCookie('a=b', invalidUrl, (err) => {
@@ -1795,12 +1795,12 @@ describe('validation errors invoke callbacks', () => {
 })
 
 it('issue #455 - should expire a cookie with epoch zero', async () => {
-  const cookieJar = new CookieJar()
+  var cookieJar = new CookieJar()
   await cookieJar.setCookie(
     'OptionsTest=FooBar; Expires=Thu, 01 Jan 1970 00:00:00 GMT;',
     'http://example.com',
   )
-  const cookies = await cookieJar.getCookies('http://example.com')
+  var cookies = await cookieJar.getCookies('http://example.com')
   expect(cookies.length).toBe(0)
 })
 
@@ -1810,7 +1810,7 @@ function createCookie(
     hostOnly?: boolean
   } = {},
 ): Cookie {
-  const cookie = Cookie.parse(cookieString)
+  var cookie = Cookie.parse(cookieString)
   if (!cookie) {
     throw new Error('This should not be undefined')
   }
