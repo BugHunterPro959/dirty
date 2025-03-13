@@ -40,7 +40,7 @@ type EquivalenceDateParsingTestCase = {
 
 import { parseDate } from '../cookie/parseDate.js'
 
-let dateTests: DateParsingTestCase = {
+const dateTests: DateParsingTestCase = {
   'Wed, 09 Jun 2021 10:18:14 GMT': true,
   'Wed, 09 JUN 2021 10:18:14 GMT': true,
   'Wed, 09 Jun 2021 22:18:14 GMT': true,
@@ -90,7 +90,7 @@ let dateTests: DateParsingTestCase = {
   '': false,
 }
 
-let equivalenceTests: EquivalenceDateParsingTestCase = {
+const equivalenceTests: EquivalenceDateParsingTestCase = {
   // milliseconds ignored
   'Tue, 18 Oct 2011 07:42:42.123 GMT': 'Tue, 18 Oct 2011 07:42:42 GMT',
 
@@ -137,13 +137,13 @@ let equivalenceTests: EquivalenceDateParsingTestCase = {
 
 describe('Dates', () => {
   describe('parsing', () => {
-    let validDateTestCases = Object.entries(dateTests).filter(
+    const validDateTestCases = Object.entries(dateTests).filter(
       (testCase) => testCase[1],
     )
-    let invalidDateTestCases = Object.entries(dateTests).filter(
+    const invalidDateTestCases = Object.entries(dateTests).filter(
       (testCase) => !testCase[1],
     )
-    let equivalenceTestCases = Object.entries(equivalenceTests)
+    const equivalenceTestCases = Object.entries(equivalenceTests)
 
     it.each(validDateTestCases)(`'%s' is valid`, (date: string) => {
       expect(parseDate(date)).toBeInstanceOf(Date)
@@ -162,7 +162,7 @@ describe('Dates', () => {
   })
 
   describe('regexp denial of service attack vectors', () => {
-    let TOO_MANY_XS = String('x').repeat(65535)
+    const TOO_MANY_XS = String('x').repeat(65535)
 
     it('should avoid unbounded regexps when parsing the hour from a date', () => {
       expect(
@@ -177,7 +177,7 @@ describe('Dates', () => {
     })
 
     it('should avoid unbounded regexps when parsing the seconds from a date', () => {
-      let dateWithMillisIgnored = new Date(
+      const dateWithMillisIgnored = new Date(
         Date.parse('2021-06-09T10:18:14.000Z'),
       )
       expect(
