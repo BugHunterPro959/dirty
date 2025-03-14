@@ -53,8 +53,8 @@ export function domainMatch(
     return undefined
   }
 
-  let _str: Nullable<string>
-  let _domStr: Nullable<string>
+  const _str: Nullable<string>
+  const _domStr: Nullable<string>
 
   if (canonicalize !== false) {
     _str = canonicalDomain(domain)
