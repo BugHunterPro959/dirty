@@ -72,13 +72,13 @@ export function validate(
   message?: string,
 ): void {
   if (bool) return // Validation passes
-  const cb = typeof cbOrMessage === 'function' ? cbOrMessage : undefined
+  var cb = typeof cbOrMessage === 'function' ? cbOrMessage : undefined
   let options = typeof cbOrMessage === 'function' ? message : cbOrMessage
   // The default message prior to v5 was '[object Object]' due to a bug, and the message is kept
   // for backwards compatibility.
   if (!isObject(options)) options = '[object Object]'
 
-  const err = new ParameterError(safeToString(options))
+  var err = new ParameterError(safeToString(options))
   if (cb) cb(err)
   else throw err
 }
