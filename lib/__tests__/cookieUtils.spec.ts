@@ -8,7 +8,7 @@ afterAll(() => vi.useRealTimers())
 describe('Cookie utils', () => {
   describe('custom inspect', () => {
     it('should be a readable string', () => {
-      let cookie = new Cookie({
+      const cookie = new Cookie({
         key: 'test',
         value: 'b',
         maxAge: 60,
