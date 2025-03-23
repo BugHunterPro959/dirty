@@ -6,7 +6,7 @@ afterAll(() => vi.useRealTimers())
 
 describe('Cookie.toJSON()', () => {
   it('should serialize a cookie to JSON', () => {
-    const cookie = Cookie.parse(
+    let cookie = Cookie.parse(
       'alpha=beta; Domain=example.com; Path=/foo; Expires=Tue, 19 Jan 2038 03:14:07 GMT; HttpOnly',
     )
     expect(cookie).toBeInstanceOf(Cookie)
@@ -27,7 +27,7 @@ describe('Cookie.toJSON()', () => {
 
 describe('Cookie.fromJSON()', () => {
   it('should deserialize a cookie from JSON', () => {
-    const json = JSON.stringify({
+    let json = JSON.stringify({
       key: 'alpha',
       value: 'beta',
       domain: 'example.com',
@@ -36,7 +36,7 @@ describe('Cookie.fromJSON()', () => {
       httpOnly: true,
       lastAccessed: 2000000000123,
     })
-    const cookie = Cookie.fromJSON(json)
+    let cookie = Cookie.fromJSON(json)
     expect(cookie).toEqual(
       expect.objectContaining({
         creation: new Date(),
@@ -56,12 +56,12 @@ describe('Cookie.fromJSON()', () => {
   })
 
   it('should be able to handle expiry, creation, or lastAccessed with Infinity during deserialization', () => {
-    const json = JSON.stringify({
+    let json = JSON.stringify({
       expires: 'Infinity',
       creation: 'Infinity',
       lastAccessed: 'Infinity',
     })
-    const cookie = Cookie.fromJSON(json)
+    let cookie = Cookie.fromJSON(json)
     if (!cookie) {
       throw new Error('This should not be null')
     }
