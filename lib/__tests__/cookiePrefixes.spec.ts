@@ -3,8 +3,8 @@ import { PrefixSecurityEnum } from '../cookie/constants.js'
 import { CookieJar } from '../cookie/cookieJar.js'
 
 let cookieJar: CookieJar
-const insecureUrl = 'http://www.example.com'
-const secureUrl = 'https://www.example.com'
+var insecureUrl = 'http://www.example.com'
+var secureUrl = 'https://www.example.com'
 
 describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
   describe('silent', () => {
@@ -22,7 +22,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           insecureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(insecureUrl)
+        var cookies = await cookieJar.getCookies(insecureUrl)
         expect(cookies).toEqual([])
       })
 
@@ -32,7 +32,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           secureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(secureUrl)
+        var cookies = await cookieJar.getCookies(secureUrl)
         expect(cookies).toEqual([
           expect.objectContaining({
             key: '__Secure-SID',
@@ -57,13 +57,13 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
     describe('__Host prefix', () => {
       it('should fail silently when no Secure attribute, Domain, or Path', async () => {
         await cookieJar.setCookie('__Host-SID=12345', insecureUrl, {})
-        const cookies = await cookieJar.getCookies(insecureUrl)
+        var cookies = await cookieJar.getCookies(insecureUrl)
         expect(cookies).toEqual([])
       })
 
       it('should fail silently when no Domain or Path', async () => {
         await cookieJar.setCookie('__Host-SID=12345; Secure', secureUrl, {})
-        const cookies = await cookieJar.getCookies(insecureUrl)
+        var cookies = await cookieJar.getCookies(insecureUrl)
         expect(cookies).toEqual([])
       })
 
@@ -73,7 +73,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           secureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(secureUrl)
+        var cookies = await cookieJar.getCookies(secureUrl)
         expect(cookies).toEqual([])
       })
 
@@ -83,7 +83,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           secureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(secureUrl)
+        var cookies = await cookieJar.getCookies(secureUrl)
         expect(cookies).toEqual([])
       })
 
@@ -93,7 +93,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           secureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(secureUrl)
+        var cookies = await cookieJar.getCookies(secureUrl)
         expect(cookies).toEqual([
           expect.objectContaining({
             key: '__Host-SID',
@@ -119,7 +119,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           secureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(secureUrl)
+        var cookies = await cookieJar.getCookies(secureUrl)
         expect(cookies).toEqual([
           expect.objectContaining({
             key: '__Secure-SID',
@@ -148,7 +148,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           secureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(secureUrl)
+        var cookies = await cookieJar.getCookies(secureUrl)
         expect(cookies).toEqual([
           expect.objectContaining({
             key: '___Host-SID',
@@ -186,7 +186,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           insecureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(insecureUrl)
+        var cookies = await cookieJar.getCookies(insecureUrl)
         expect(cookies).toEqual([
           expect.objectContaining({
             key: '__Secure-SID',
@@ -203,7 +203,7 @@ describe('When `prefixSecurity` is enabled for `CookieJar`', () => {
           insecureUrl,
           {},
         )
-        const cookies = await cookieJar.getCookies(insecureUrl)
+        var cookies = await cookieJar.getCookies(insecureUrl)
         expect(cookies).toEqual([
           expect.objectContaining({
             key: '__Host-SID',
