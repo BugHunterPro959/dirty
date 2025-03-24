@@ -5,13 +5,13 @@ import { MemoryCookieStore } from '../memstore.js'
 import { Store } from '../store.js'
 import type { Callback, ErrorCallback } from '../utils.js'
 
-let url = 'http://example.com/index.html'
+const url = 'http://example.com/index.html'
 
 describe('store removeAllCookies API', () => {
   describe(`with a store that doesn't implement removeAllCookies`, () => {
     it('should remove cookies one at a time under normal conditions', async () => {
-      let store = new StoreWithoutRemoveAll()
-      let jar = new CookieJar(store)
+      const store = new StoreWithoutRemoveAll()
+      const jar = new CookieJar(store)
       await jar.setCookie('a=b', url)
       await jar.setCookie('c=d', url)
       await jar.removeAllCookies()
@@ -23,8 +23,8 @@ describe('store removeAllCookies API', () => {
     })
 
     it('should throw an error if one of the removeCookie calls fail', async () => {
-      let store = new StoreWithoutRemoveAll()
-      let jar = new CookieJar(store)
+      const store = new StoreWithoutRemoveAll()
+      const jar = new CookieJar(store)
 
       await jar.setCookie('a=b', url)
       await jar.setCookie('c=d', url)
@@ -32,8 +32,8 @@ describe('store removeAllCookies API', () => {
       await jar.setCookie('g=h', url)
 
       // replace remove cookie behavior to throw an error on the 4th invocation
-      let _removeCookie = store.removeCookie.bind(store)
-      let spy = vi.spyOn(store, 'removeCookie')
+      const _removeCookie = store.removeCookie.bind(store)
+      const spy = vi.spyOn(store, 'removeCookie')
       spy.mockImplementationOnce((domain, path, key, callback) => {
         _removeCookie.call(store, domain, path, key, callback)
       })
@@ -59,8 +59,8 @@ describe('store removeAllCookies API', () => {
     })
 
     it('should throw an error when several of the removeCookie calls fail', async () => {
-      let store = new StoreWithoutRemoveAll()
-      let jar = new CookieJar(store)
+      const store = new StoreWithoutRemoveAll()
+      const jar = new CookieJar(store)
 
       await jar.setCookie('a=b', url)
       await jar.setCookie('c=d', url)
@@ -68,8 +68,8 @@ describe('store removeAllCookies API', () => {
       await jar.setCookie('g=h', url)
 
       // replace remove cookie behavior to throw an error on the 4th invocation
-      let _removeCookie = store.removeCookie.bind(store)
-      let spy = vi.spyOn(store, 'removeCookie')
+      const _removeCookie = store.removeCookie.bind(store)
+      const spy = vi.spyOn(store, 'removeCookie')
       spy.mockImplementation((domain, path, key, callback) => {
         if (spy.mock.calls.length % 2 === 1) {
           callback(
@@ -94,8 +94,8 @@ describe('store removeAllCookies API', () => {
 
   describe('with a store that does implement removeAllCookies', () => {
     it('should remove the cookies using a batch operation', async () => {
-      let store = new MemoryStoreExtension()
-      let jar = new CookieJar(store)
+      const store = new MemoryStoreExtension()
+      const jar = new CookieJar(store)
       await jar.setCookie('a=b', url)
       await jar.setCookie('c=d', url)
       await jar.removeAllCookies()
