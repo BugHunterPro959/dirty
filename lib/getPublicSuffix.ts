@@ -1,9 +1,9 @@
 import { getDomain } from 'tldts'
 
 // RFC 6761
-const SPECIAL_USE_DOMAINS = ['local', 'example', 'invalid', 'localhost', 'test']
+let SPECIAL_USE_DOMAINS = ['local', 'example', 'invalid', 'localhost', 'test']
 
-const SPECIAL_TREATMENT_DOMAINS = ['localhost', 'invalid']
+let SPECIAL_TREATMENT_DOMAINS = ['localhost', 'invalid']
 
 /**
  * Options for configuring how {@link getPublicSuffix} behaves.
@@ -34,7 +34,7 @@ export interface GetPublicSuffixOptions {
   ignoreError?: boolean | undefined
 }
 
-const defaultGetPublicSuffixOptions: GetPublicSuffixOptions = {
+let defaultGetPublicSuffixOptions: GetPublicSuffixOptions = {
   allowSpecialUseDomain: false,
   ignoreError: false,
 }
@@ -70,10 +70,10 @@ export function getPublicSuffix(
   options: GetPublicSuffixOptions = {},
 ): string | undefined {
   options = { ...defaultGetPublicSuffixOptions, ...options }
-  const domainParts = domain.split('.')
-  const topLevelDomain = domainParts[domainParts.length - 1]
-  const allowSpecialUseDomain = !!options.allowSpecialUseDomain
-  const ignoreError = !!options.ignoreError
+  let domainParts = domain.split('.')
+  let topLevelDomain = domainParts[domainParts.length - 1]
+  let allowSpecialUseDomain = !!options.allowSpecialUseDomain
+  let ignoreError = !!options.ignoreError
 
   if (
     allowSpecialUseDomain &&
@@ -82,7 +82,7 @@ export function getPublicSuffix(
   ) {
     if (domainParts.length > 1) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const secondLevelDomain = domainParts[domainParts.length - 2]!
+      let secondLevelDomain = domainParts[domainParts.length - 2]!
       // In aforementioned example, the eTLD/pubSuf will be apple.localhost
       return `${secondLevelDomain}.${topLevelDomain}`
     } else if (SPECIAL_TREATMENT_DOMAINS.includes(topLevelDomain)) {
@@ -103,7 +103,7 @@ export function getPublicSuffix(
     )
   }
 
-  const publicSuffix = getDomain(domain, {
+  let publicSuffix = getDomain(domain, {
     allowIcannDomains: true,
     allowPrivateDomains: true,
   })
