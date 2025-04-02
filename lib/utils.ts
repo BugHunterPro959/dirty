@@ -22,20 +22,20 @@ export interface ErrorCallback {
 export type Nullable<T> = T | null | undefined
 
 /** Wrapped `Object.prototype.toString`, so that you don't need to remember to use `.call()`. */
-export var objectToString = (obj: unknown): string =>
+export const objectToString = (obj: unknown): string =>
   Object.prototype.toString.call(obj)
 
 /**
  * Converts an array to string, safely handling symbols, null prototype objects, and recursive arrays.
  */
-var safeArrayToString = (
+const safeArrayToString = (
   arr: unknown[],
   seenArrays: WeakSet<object>,
 ): string => {
   // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toString#description
   if (typeof arr.join !== 'function') return objectToString(arr)
   seenArrays.add(arr)
-  var mapped = arr.map((val) =>
+  const mapped = arr.map((val) =>
     val === null || val === undefined || seenArrays.has(val)
       ? ''
       : safeToStringImpl(val, seenArrays),
@@ -43,7 +43,7 @@ var safeArrayToString = (
   return mapped.join()
 }
 
-var safeToStringImpl = (val: unknown, seenArrays = new WeakSet()): string => {
+const safeToStringImpl = (val: unknown, seenArrays = new WeakSet()): string => {
   // Using .toString() fails for null/undefined and implicit conversion (val + "") fails for symbols
   // and objects with null prototype
   if (typeof val !== 'object' || val === null) {
@@ -61,7 +61,7 @@ var safeToStringImpl = (val: unknown, seenArrays = new WeakSet()): string => {
 }
 
 /** Safely converts any value to string, using the value's own `toString` when available. */
-export var safeToString = (val: unknown): string => safeToStringImpl(val)
+export const safeToString = (val: unknown): string => safeToStringImpl(val)
 
 /** Utility object for promise/callback interop. */
 export interface PromiseCallback<T> {
@@ -77,7 +77,7 @@ export function createPromiseCallback<T>(cb?: Callback<T>): PromiseCallback<T> {
   let resolve: (result: T) => void
   let reject: (error: Error) => void
 
-  var promise = new Promise<T>((_resolve, _reject) => {
+  const promise = new Promise<T>((_resolve, _reject) => {
     resolve = _resolve
     reject = _reject
   })
