@@ -47,7 +47,7 @@ export function canonicalDomain(
   if (domainName == null) {
     return undefined
   }
-  const str = domainName.trim().replace(/^\./, '') // S4.1.2.3 & S5.2.3: ignore leading .
+  let str = domainName.trim().replace(/^\./, '') // S4.1.2.3 & S5.2.3: ignore leading .
 
   if (IP_V6_REGEX_OBJECT.test(str)) {
     if (!str.startsWith('[')) {
