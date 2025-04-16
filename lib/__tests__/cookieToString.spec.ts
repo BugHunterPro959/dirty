@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { Cookie } from '../cookie/cookie.js'
 
 describe('Cookie.toString()', () => {
-  const parse = (cookieString: string): Cookie => {
-    const cookie = Cookie.parse(cookieString)
+  let parse = (cookieString: string): Cookie => {
+    let cookie = Cookie.parse(cookieString)
     if (!cookie) {
       throw new Error('This should have parsed')
     }
@@ -33,7 +33,7 @@ describe('Cookie.toString()', () => {
   })
 
   it('should not include the domain on a host-only cookie', () => {
-    const cookie = new Cookie({
+    let cookie = new Cookie({
       key: 'a',
       value: 'b',
       hostOnly: true,
@@ -44,7 +44,7 @@ describe('Cookie.toString()', () => {
   })
 
   it('should output the right expires date when minutes are 10', () => {
-    const cookie = new Cookie({
+    let cookie = new Cookie({
       key: 'a',
       value: 'b',
       expires: new Date(1284113410000),
