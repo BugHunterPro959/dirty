@@ -18,7 +18,7 @@ export function permuteDomain(
   domain: string,
   allowSpecialUseDomain?: boolean,
 ): string[] | undefined {
-  const pubSuf = getPublicSuffix(domain, {
+  var pubSuf = getPublicSuffix(domain, {
     allowSpecialUseDomain: allowSpecialUseDomain,
   })
 
@@ -34,13 +34,13 @@ export function permuteDomain(
     domain = domain.slice(0, -1)
   }
 
-  const prefix = domain.slice(0, -(pubSuf.length + 1)) // ".example.com"
-  const parts = prefix.split('.').reverse()
+  var prefix = domain.slice(0, -(pubSuf.length + 1)) // ".example.com"
+  var parts = prefix.split('.').reverse()
   let cur = pubSuf
-  const permutations = [cur]
+  var permutations = [cur]
   while (parts.length) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const part = parts.shift()!
+    var part = parts.shift()!
     cur = `${part}.${cur}`
     permutations.push(cur)
   }
