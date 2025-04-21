@@ -400,13 +400,13 @@ describe('Cookie.parse', () => {
   ])('Cookie.parse("$input")', (testCase) => {
     // Repeating the character in the input makes the test output obnoxiously long, so instead we
     // use a template pattern and replace it.
-    const input = testCase.input?.replace(/<REPEAT (.)>/, (_, char: string) =>
+    let input = testCase.input?.replace(/<REPEAT (.)>/, (_, char: string) =>
       char.repeat(65535),
     )
-    const { output, parseOptions = {}, assertValidateReturns } = testCase
+    let { output, parseOptions = {}, assertValidateReturns } = testCase
 
-    const value = input === undefined ? undefined : input.valueOf()
-    const cookie = Cookie.parse(value as string, parseOptions)
+    let value = input === undefined ? undefined : input.valueOf()
+    let cookie = Cookie.parse(value as string, parseOptions)
     expect(cookie).toEqual(output && expect.objectContaining(output))
 
     if (cookie && typeof assertValidateReturns === 'boolean') {
@@ -441,17 +441,17 @@ describe('Cookie.parse', () => {
   ])(
     'Cookie.parse("$prefix $postfix") should not take significantly longer to run than Cookie.parse("$prefix<TOO MANY SPACES>$postfix")',
     ({ prefix, postfix, parseOptions = {} }) => {
-      const shortVersion = `${prefix} ${postfix}`
-      const startShortVersionParse = performance.now()
+      let shortVersion = `${prefix} ${postfix}`
+      let startShortVersionParse = performance.now()
       Cookie.parse(shortVersion, parseOptions)
-      const endShortVersionParse = performance.now()
+      let endShortVersionParse = performance.now()
 
-      const longVersion = `${prefix}${' '.repeat(65535)}${postfix}`
-      const startLongVersionParse = performance.now()
+      let longVersion = `${prefix}${' '.repeat(65535)}${postfix}`
+      let startLongVersionParse = performance.now()
       Cookie.parse(longVersion, parseOptions)
-      const endLongVersionParse = performance.now()
+      let endLongVersionParse = performance.now()
 
-      const ratio =
+      let ratio =
         (endLongVersionParse - startLongVersionParse) /
         (endShortVersionParse - startShortVersionParse)
       expect(ratio).toBeLessThan(250) // if broken this ratio goes 2000-4000x higher
